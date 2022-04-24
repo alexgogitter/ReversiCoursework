@@ -1,9 +1,13 @@
-public class main {
+package reversi_Coursework;
+
+public class Main {
 
 	public static void main(String[] args) {
-	
+		// TODO Auto-generated method stub
+		Model model = new Model();
 		
-		
+		new View(model, false, "White").createGUI();
+		new View(model, true, "Black").createGUI();
 	}
 
 }
