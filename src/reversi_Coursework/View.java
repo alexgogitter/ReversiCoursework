@@ -29,7 +29,6 @@ public class View implements ActionListener{
 		colour=playerColor;
 		model.storeView(this);
 		this.reverse = reverse;
-		
 		if(playerColor=="White") {
 			this.myPiece=Piece.WHITE;
 		}
@@ -39,7 +38,7 @@ public class View implements ActionListener{
 		}
 	}
 	
-	public void createGUI()
+	public void createGUI()//On Page intialization this gets executed
 	{
     	guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close window exits
     	guiFrame.setTitle(colour + "'s Window"); // Set a caption/title bar content for the frame
@@ -114,11 +113,16 @@ public class View implements ActionListener{
 		else if(model.getCurrentTurn()==myPiece && 
 				((CounterPlacementButton)e.getSource()).getPiece()==Piece.POTENTIAL)//Checks if the current turn is the turn associated to the window and if the placement is valid
 		{
-			model.set(((CounterPlacementButton)e.getSource()).getPosition(), myPiece);//Updates the model with the newly place piece
+			model.set(((CounterPlacementButton)e.getSource()).getPosition(), myPiece);//Updates the model with the newly placed piece
+			
+//			model.makeMove(((CounterPlacementButton)e.getSource()).getPosition());
+			
 			if(model.getCurrentTurn()==Piece.WHITE)
 				model.setCurrentTurn(Piece.BLACK);
 			else
 				model.setCurrentTurn(Piece.WHITE);
+			
+			model.clearPotentialMoves();
 			
 			
 		}
@@ -128,26 +132,21 @@ public class View implements ActionListener{
 	
 	public void update() // Gets applied to all Boards
 	{	
-		model.clearPotentialMoves();
-		
-		
+		model.updatePotentialMoves();
 		
 		if(myPiece==model.getCurrentTurn())
     	{
     		turnOutput.setText("My Turn");
     		
-    		model.updatePotentialMoves();
     	}
     	else
     	{
+    		
     		if(model.getCurrentTurn()==Piece.WHITE)
-    		{
     			turnOutput.setText("White's Turn");
-    		}
     		else
-    		{
     			turnOutput.setText("Black's Turn");
-    		}
+    		
     	}
 		
 		for ( int i = 0 ; i < buttonArray.length ; i++ )
@@ -156,15 +155,15 @@ public class View implements ActionListener{
 				buttonArray[i].setPiece(model.get(i));
 			else
 				buttonArray[i].setPiece(model.get(63-i));
+			if(model.getCurrentTurn()==myPiece)
+				buttonArray[i].updateBG();
+			else
+				buttonArray[i].wipeBG();
 			
-			buttonArray[i].updateBG();
 		}
 		
-		
-		
-			
-		
 		guiFrame.repaint();
+		
 	}
 	
 }

@@ -72,6 +72,13 @@ public class CounterPlacementButton extends JButton
 		}
 	}
 	
+	protected void wipeBG()
+	{
+		
+		this.backgroundColor=Color.green;
+		
+	}
+	
 	protected void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
