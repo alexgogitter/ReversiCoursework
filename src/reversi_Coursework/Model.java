@@ -19,12 +19,12 @@ public class Model {
 	
 	int[] cornerCases = {0, 7, 56, 63};
 	
-	int[] nonEdgeCaseTransforms = {-9, -8, -7, -1, 0, 1, 7, 8, 9};
+	int[] nonEdgeCaseTransforms = {-9, -8, -7, -1, 1, 7, 8, 9};
 	
-	int[] leftEdgeCaseTransforms = {-8, -7,  0, 1,  8, 9};
-	int[] rightEdgeCaseTransforms = {-9, -8, -1, 0, 7, 8};
-	int[] topEdgeCaseTransforms = {-1, 0, 1, 7, 8, 9};
-	int[] bottomEdgeCaseTransforms = {-9, -8, -7, -1, 0, 1};
+	int[] leftEdgeCaseTransforms = {-8, -7, 1,  8, 9};
+	int[] rightEdgeCaseTransforms = {-9, -8, -1, 7, 8};
+	int[] topEdgeCaseTransforms = {-1, 1, 7, 8, 9};
+	int[] bottomEdgeCaseTransforms = {-9, -8, -7, -1, 1};
 	
 	public boolean isIn(int[] haystack, int needle)
 	{
@@ -139,7 +139,7 @@ public class Model {
 		&&!isIn(cornerCases, i1);
 	}
 	
-	private PotentialMove processPoints(PotentialMove m, int[] transforms, int index)
+	private void processPoints(PotentialMove m, int[] transforms, int index)
 	{
 		for(int k=0; k<transforms.length; k++)
 		{	
@@ -280,63 +280,50 @@ public class Model {
 			}
 			
 			//System.out.println("index: "+ index +". offset:" + offset + ". Limits: " + lowerLimit + ", " + upperLimit);
+			boolean validDirection=true;
+			int commonPiece=-1;
 			
-			if(pieces[index+offset]==getOppositePiece(currentTurn))
+			while(i>=lowerLimit&&i<=upperLimit)
 			{
-				boolean validDirection=true;
-				i+=offset;
-				while((i>=lowerLimit&&i<=upperLimit)&&pieces[i]!=currentTurn)
+				if(pieces[i]==currentTurn)
 				{
-					if(pieces[i]!=getOppositePiece(currentTurn))
+					commonPiece=i;
+					break;
+				}
+				
+				i+=offset;
+				
+			}
+			if(commonPiece>=0&&pieces[index+offset]==getOppositePiece(currentTurn))
+			{
+				int j = index+offset;
+				while(j!=commonPiece)
+				{
+					if(pieces[j]!=getOppositePiece(currentTurn))
 					{
-						System.out.println("A B");
 						validDirection=false;
 						break;
 					}
-					i+=offset;
+					
+					j+=offset;
 				}
 				
-				if(validDirection)
+			}
+			else
+			{
+				validDirection=false;
+			}
+		
+			if(validDirection)
+			{
+				int j = index;
+				while(j!=commonPiece)
 				{
-					System.out.println("B");
-					int j=index;
-					while(j!=i)
-					{
-						m.addTakenPiece(j);
-						j+=offset;
-					}
+					m.addTakenPiece(j);
+					j+=offset;
 				}
 			}
-//			if(pieces[index+offset]==getOppositePiece(currentTurn))//If we are next to one of the opponents pieces
-//			{
-//				
-////				while(pieces[i]!=currentTurn)
-////				{
-////					i+=offset;
-////					if(!(i<=upperLimit&&i>=lowerLimit))
-////					{
-////						i-=offset;
-////						break;
-////					}
-////				}
-////				
-////				if(pieces[i]==currentTurn)
-////				{
-////					int j = index+offset;
-////					
-////					while(j!=i&&pieces[j]!=Piece.EMPTY)
-////					{
-////						m.addTakenPiece(j);
-////						j+=offset;	
-////					}
-////				}	
-//				
-//				
-//				
-//			}
 		}
-		return m;
-		
 	}
 	
 	private boolean validatePoint(int index)
@@ -374,22 +361,22 @@ public class Model {
 			
 			if(index==0)
 			{
-				int[] i= {0, 1, 8, 9};
+				int[] i= { 1, 8, 9};
 				processPoints(m, i, index);
 			}
 			else if(index==7)
 			{
-				int[] i= {-1, 0, 7, 8};
+				int[] i= {-1, 7, 8};
 				processPoints(m, i, index);
 			}
 			else if(index==56)
 			{
-				int[] i= {1, 0, -8, -7};
+				int[] i= {1,  -8, -7};
 				processPoints(m, i, index);
 			}
 			else if(index==63)
 			{
-				int[] i= {-1, 0, -8,-9};
+				int[] i= {-1, -8,-9};
 				processPoints(m, i, index);
 			}
 		}
