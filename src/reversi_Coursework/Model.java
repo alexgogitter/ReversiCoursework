@@ -3,6 +3,8 @@ package reversi_Coursework;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.swing.JOptionPane;
+
 
 public class Model {
 
@@ -37,7 +39,7 @@ public class Model {
 		return false;
 	}
 	
-	private class PotentialMove{//A struct-like class to help me with associating potential moves and the pieces taken when that move is maid
+	private class PotentialMove{//A struct-like class to help me with associating potential moves and the pieces taken when that move is made
 		private int moveIndex;
 		ArrayList<Integer> takenPieces = new ArrayList<>();
 		
@@ -53,12 +55,10 @@ public class Model {
 		{
 			takenPieces.add(takenPiece);
 		}
-		
 		public int getLengthTakenPieces()
 		{
 			return takenPieces.size();
 		}
-		
 		public ArrayList<Integer> getPieces()
 		{
 			return takenPieces;
@@ -68,6 +68,23 @@ public class Model {
 	
 	public Model()
 	{
+		
+		this.currentTurn=Piece.WHITE;
+		
+		for(int i=0; i<pieces.length; i++)
+			pieces[i]=Piece.EMPTY;
+		
+		pieces[27] = Piece.WHITE;
+		pieces[36] = Piece.WHITE;
+		pieces[28] = Piece.BLACK;
+		pieces[35] = Piece.BLACK;
+	}
+	
+	public void resetBoard()
+	{
+		this.currentTurn=Piece.WHITE;
+		
+		this.clearPotentialMoves();
 		
 		for(int i=0; i<pieces.length; i++)
 			pieces[i]=Piece.EMPTY;
@@ -92,6 +109,78 @@ public class Model {
 			}
 		}
 		
+	}
+	
+	public int autoMove()
+	{
+		int currentMove = -1, currentMoveTaken = -1;
+		for(int i=0; i<potentialMoves.size(); i++)
+		{
+			
+			
+			if(potentialMoves.get(i).getLengthTakenPieces()>currentMoveTaken)
+			{
+				currentMove=potentialMoves.get(i).getMoveIndex();
+				currentMoveTaken=potentialMoves.get(i).getLengthTakenPieces();
+			}
+			
+		}
+		
+		if(currentMove!=-1)
+		{
+			return currentMove;
+		}
+		
+		return -1;
+		
+	}
+	
+	public void checkMakeMoves()
+	{
+		if(!(potentialMoves.size()>0))
+		{
+			this.currentTurn=getOppositePiece(currentTurn);
+			this.updatePotentialMoves();
+			if(!(potentialMoves.size()>0))
+			{
+				this.currentTurn=Piece.EMPTY;//Stops anyone from makiing moves.
+				int black = 0, white = 0;
+				
+				for(int i = 0; i<64; i++)
+				{
+					if(this.get(i)==Piece.WHITE)
+						white++;
+					else if(this.get(i)==Piece.BLACK)
+						black++;
+				}
+				
+				String winner = "";
+				if(black>white)
+				{
+					winner="Black";
+				}
+				else if(black<white)
+				{
+					winner = "White";
+				}
+				else if(black==white)
+				{
+					winner = "no one";
+				}
+				int confirm = JOptionPane.showOptionDialog(null, "The Winner is " + winner +"\n" + "White: "+ white+"\nBlack: " + black+"\n\nPlay Again?", "Play again?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+	         
+				if(confirm==0)
+				{
+					this.resetBoard();
+					this.updatePotentialMoves();
+				}
+				
+				else
+					System.exit(0);
+			}
+		}
+			
+			
 	}
 	
 	public Piece getOppositePiece(Piece p)
@@ -121,7 +210,8 @@ public class Model {
 	
 	public void updatePotentialMoves()
 	{
-		
+//		if(canMakeMove())
+//		{
 		for(int i=0; i<pieces.length; i++)
 		{
 			
@@ -130,6 +220,26 @@ public class Model {
 				pieces[i]=Piece.POTENTIAL;
 			}
 		}
+//		}
+//		else
+//		{
+//			this.currentTurn=getOppositePiece(this.currentTurn);
+//			
+//			if(canMakeMove())
+//			{
+//				for(int i=0; i<pieces.length; i++)
+//				{
+//					
+//					if(pieces[i]==Piece.EMPTY&&validatePoint(i))
+//					{
+//						pieces[i]=Piece.POTENTIAL;
+//					}
+//				}
+//			}
+//			else
+//				this.currentTurn=Piece.EMPTY;
+//		}
+		
 	}
 	
 	private boolean generalCase(int i1)

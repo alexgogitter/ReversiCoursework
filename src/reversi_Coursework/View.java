@@ -2,12 +2,10 @@ package reversi_Coursework;
 
 import java.awt.BorderLayout;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -107,12 +105,20 @@ public class View implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e)//Listens for any event
 	{
-		if(e.getActionCommand().equals("AI Move")) {//Checks to see if the AI button is pressed
-			System.out.println("NOT YET IMPLEMENTED");
+		if(model.getCurrentTurn()==myPiece && e.getActionCommand().equals("AI Move")) {//Checks to see if the AI button is pressed
+			model.set(model.autoMove(), myPiece);
+			if(model.getCurrentTurn()==Piece.WHITE)
+				model.setCurrentTurn(Piece.BLACK);
+			else
+				model.setCurrentTurn(Piece.WHITE);
+			
+			model.clearPotentialMoves();
 		}
 		else if(model.getCurrentTurn()==myPiece && 
 				((CounterPlacementButton)e.getSource()).getPiece()==Piece.POTENTIAL)//Checks if the current turn is the turn associated to the window and if the placement is valid
 		{
+			
+			
 			model.set(((CounterPlacementButton)e.getSource()).getPosition(), myPiece);//Updates the model with the newly placed piece
 			
 //			model.makeMove(((CounterPlacementButton)e.getSource()).getPosition());
@@ -133,6 +139,34 @@ public class View implements ActionListener{
 	public void update() // Gets applied to all Boards
 	{	
 		model.updatePotentialMoves();
+		
+		model.checkMakeMoves();
+		
+//		if(model.getCurrentTurn()==Piece.EMPTY)
+//		{
+//			//This means the game has come to a stand-still with no players being able to make a move.
+//			//To determine The winner all pieces must be counted up and the player with the most wins.
+//			
+//			int black = 0, white = 0;
+//			
+//			for(int i = 0; i<64; i++)
+//			{
+//				if(model.get(i)==Piece.WHITE)
+//					white++;
+//				else if(model.get(i)==Piece.BLACK)
+//					black++;
+//			}
+//			
+////			int confirm = JOptionPane.showOptionDialog(null, "You want to start again?", "Again?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+////            /*
+////             0 = yes
+////             1 = no
+////             */
+//			
+//			
+//		}
+//		else 
+		
 		
 		if(myPiece==model.getCurrentTurn())
     	{
@@ -160,7 +194,7 @@ public class View implements ActionListener{
 			else
 				buttonArray[i].wipeBG();
 			
-		}
+		} 
 		
 		guiFrame.repaint();
 		
