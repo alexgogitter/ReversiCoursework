@@ -140,33 +140,7 @@ public class View implements ActionListener{
 	{	
 		model.updatePotentialMoves();
 		
-		model.checkMakeMoves();
-		
-//		if(model.getCurrentTurn()==Piece.EMPTY)
-//		{
-//			//This means the game has come to a stand-still with no players being able to make a move.
-//			//To determine The winner all pieces must be counted up and the player with the most wins.
-//			
-//			int black = 0, white = 0;
-//			
-//			for(int i = 0; i<64; i++)
-//			{
-//				if(model.get(i)==Piece.WHITE)
-//					white++;
-//				else if(model.get(i)==Piece.BLACK)
-//					black++;
-//			}
-//			
-////			int confirm = JOptionPane.showOptionDialog(null, "You want to start again?", "Again?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-////            /*
-////             0 = yes
-////             1 = no
-////             */
-//			
-//			
-//		}
-//		else 
-		
+		model.checkMakeMoves();		
 		
 		if(myPiece==model.getCurrentTurn())
     	{

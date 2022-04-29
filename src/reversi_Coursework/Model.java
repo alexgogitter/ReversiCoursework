@@ -1,7 +1,6 @@
 package reversi_Coursework;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
@@ -210,8 +209,6 @@ public class Model {
 	
 	public void updatePotentialMoves()
 	{
-//		if(canMakeMove())
-//		{
 		for(int i=0; i<pieces.length; i++)
 		{
 			
@@ -220,33 +217,14 @@ public class Model {
 				pieces[i]=Piece.POTENTIAL;
 			}
 		}
-//		}
-//		else
-//		{
-//			this.currentTurn=getOppositePiece(this.currentTurn);
-//			
-//			if(canMakeMove())
-//			{
-//				for(int i=0; i<pieces.length; i++)
-//				{
-//					
-//					if(pieces[i]==Piece.EMPTY&&validatePoint(i))
-//					{
-//						pieces[i]=Piece.POTENTIAL;
-//					}
-//				}
-//			}
-//			else
-//				this.currentTurn=Piece.EMPTY;
-//		}
 		
 	}
 	
-	private boolean generalCase(int i1)
+	private boolean generalCase(int i)
 	{
-		return !isIn(edgeCasesLeft, i1)&&!isIn(edgeCasesRight, i1)
-		&&!isIn(edgeCasesTop, i1)&&!isIn(edgeCasesBottom, i1)
-		&&!isIn(cornerCases, i1);
+		return !isIn(edgeCasesLeft, i)&&!isIn(edgeCasesRight, i)
+		&&!isIn(edgeCasesTop, i)&&!isIn(edgeCasesBottom, i)
+		&&!isIn(cornerCases, i);
 	}
 	
 	private void processPoints(PotentialMove m, int[] transforms, int index)
@@ -466,7 +444,7 @@ public class Model {
 			processPoints(m, bottomEdgeCaseTransforms, index);
 			
 		}
-		else if (Arrays.binarySearch(cornerCases, index) >=0)
+		else if (isIn(cornerCases, index))
 		{
 			
 			if(index==0)

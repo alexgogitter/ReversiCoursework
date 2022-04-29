@@ -6,6 +6,7 @@ import java.awt.Graphics;
 
 import javax.swing.JButton;
 
+@SuppressWarnings(value = { "The serializable class CounterPlacementButton does not declare a static final serialVersionUID field of type long" })
 public class CounterPlacementButton extends JButton
 {
 	
