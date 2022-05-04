@@ -7,7 +7,7 @@ public class main {
 		Model model = new Model();
 		
 		new View(model, false, "White").createGUI();
-		new View(model, false, "Black").createGUI();
+		new View(model, true, "Black").createGUI();
 	}
 
 }
